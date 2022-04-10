@@ -37,6 +37,7 @@ object DatabaseFactory {
 
     private fun runFlyway(datasource: DataSource) {
         val flyway = Flyway.configure()
+            .locations("classpath:/db/migrations")
             .dataSource(datasource)
             .load()
         try {
@@ -49,7 +50,7 @@ object DatabaseFactory {
         logger.info("Flyway migration has finished")
     }
 
-    fun mockDb():Unit = transaction {
+    fun mockDb(): Unit = transaction {
         mockUsers.add(User.new {
             email = "example@email.mail"
             firstName = "george"

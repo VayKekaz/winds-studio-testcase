@@ -1,0 +1,9 @@
+CREATE TABLE USERS
+(
+    ID            INT AUTO_INCREMENT PRIMARY KEY,
+    EMAIL         VARCHAR(50) NOT NULL UNIQUE,
+    "firstName"   VARCHAR(50) NOT NULL,
+    "lastName"    VARCHAR(50) NOT NULL,
+    PATRONYMIC    VARCHAR(50) NOT NULL,
+    "phoneNumber" VARCHAR(16) NOT NULL
+)
