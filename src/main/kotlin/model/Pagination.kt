@@ -1,12 +1,10 @@
 package model
 
-import com.papsign.ktor.openapigen.annotations.Response
 import kotlinx.serialization.Serializable
 import model.SortDirection.ASCENDING
 import kotlin.math.ceil
 
 @Serializable
-@Response
 data class Page<T>
 constructor(
     val content: List<T>,

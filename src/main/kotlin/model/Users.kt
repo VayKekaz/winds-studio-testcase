@@ -1,6 +1,5 @@
 package model
 
-import com.papsign.ktor.openapigen.annotations.Response
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.dao.Entity
 import org.jetbrains.exposed.dao.EntityClass
@@ -42,7 +41,6 @@ class User(id: EntityID<Int>) : Entity<Int>(id) {
 /**
  * Users DTO used to transfer via web layer.
  */
-@Response
 @Serializable
 data class UserDto(
     val id: Int? = null,
