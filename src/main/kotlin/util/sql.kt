@@ -1,3 +1,5 @@
+package util
+
 import model.Page
 import model.Pagination
 import org.jetbrains.exposed.dao.Entity

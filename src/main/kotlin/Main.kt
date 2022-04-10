@@ -11,9 +11,11 @@ import io.ktor.server.plugins.cors.*
 import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.plugins.doublereceive.*
 import io.ktor.server.plugins.statuspages.*
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import model.ServerErrorResponse
+import model.exception.RequiredParameterNotProvided
 import org.jetbrains.exposed.dao.exceptions.EntityNotFoundException
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import service.DatabaseFactory
@@ -30,57 +32,6 @@ fun main(args: Array<String>) {
 
 fun Application.module() {
 
-    /*
-    install(OpenAPIGen) {
-        info { title = "winds studio testcase" }
-        serveSwaggerUi = true
-        swaggerUiPath = "/swagger-ui/"
-        swaggerUiVersion = "4.10.3"
-    }
-
-     */
-
-    /*
-    install(Kompendium) {
-        spec = OpenApiSpec(
-            info = Info(
-                title = "Simple Demo API",
-                version = "1.33.7",
-                description = "Wow isn't this cool?",
-            ),
-            servers = mutableListOf(
-                Server(
-                    url = URI("http://localhost:8080"),
-                    description = "Production instance of my API"
-                ),
-            ),
-        )
-    }
-
-
-    install(SwaggerUI) {
-        swaggerUrl = "/swagger-ui"
-        jsConfig = JsConfig(
-            specs = mapOf(
-                "My API v1" to URI("/openapi.json"),
-                "My API v2" to URI("/openapi.json")
-            ),
-            // This part will be inserted after Swagger UI is loaded in Browser.
-            // Example is prepared according to this documentation: https://swagger.io/docs/open-source-tools/swagger-ui/usage/oauth2/
-            jsInit = {
-                """
-  window.ui.initOAuth({
-      clientId: 'CLIENT_ID',
-      clientSecret: 'CLIENT_SECRET',
-      realm: 'MY REALM',
-      appName: 'TEST APP',
-      useBasicAuthenticationWithAccessCodeGrant: true
-  });  
-      """
-            }
-        )
-    }
-     */
     install(DefaultHeaders)
     install(CallLogging)
     install(DoubleReceive) // only known way to resolve double consume exception thrown by framework in tests
@@ -89,9 +40,7 @@ fun Application.module() {
         json()
     }
 
-    install(CORS) {
-        disable()
-    }
+    install(CORS) { disable() } // TODO do i even need that?
 
     DatabaseFactory.connectAndMigrate()
     if (supposedToMockDb)
@@ -101,8 +50,11 @@ fun Application.module() {
         userRoute()
         swaggerUi()
     }
+
     install(StatusPages) {
+        defaultException<ContentTransformationException>()
         defaultException<NumberFormatException>()
+        defaultException<RequiredParameterNotProvided>()
         defaultException<EntityNotFoundException>(HttpStatusCode.NotFound)
         onException<ExposedSQLException> { // bad idea to share sql queries
             respond(ServerErrorResponse("Duplicate email.", it::class.simpleName))
@@ -110,5 +62,8 @@ fun Application.module() {
     }
 }
 
+/**
+ * Wraps `mockDb` HOCON property.
+ */
 val Application.supposedToMockDb: Boolean
     get() = environment.config.propertyOrNull("ktor.mockDb")?.getString()?.toBooleanStrict() == true

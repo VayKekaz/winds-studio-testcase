@@ -6,8 +6,10 @@ import org.jetbrains.exposed.dao.Entity
 import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
+/**
+ * Users table.
+ */
 object Users : IntIdTable() {
     val email = varchar("email", 50).uniqueIndex()
     val firstName = varchar("firstName", 50)
@@ -16,6 +18,9 @@ object Users : IntIdTable() {
     val phoneNumber = varchar("phoneNumber", 16)
 }
 
+/**
+ * Users DAO.
+ */
 class User(id: EntityID<Int>) : Entity<Int>(id) {
     companion object : EntityClass<Int, User>(Users) {
         fun new(dto: UserDto) = User.new {
@@ -34,6 +39,9 @@ class User(id: EntityID<Int>) : Entity<Int>(id) {
     var phoneNumber by Users.phoneNumber
 }
 
+/**
+ * Users DTO used to transfer via web layer.
+ */
 @Response
 @Serializable
 data class UserDto(
@@ -54,6 +62,7 @@ data class UserDto(
     )
 
     companion object {
+        // only for testing purposes
         val example = UserDto(
             email = "example@email.mail",
             firstName = "george",
