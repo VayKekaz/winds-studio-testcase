@@ -13,6 +13,9 @@ import util.getParameter
 import util.getResource
 import java.net.URL
 
+/**
+ * Defines routing responsible for swagger-ui.
+ */
 fun Route.swaggerUi() {
     static("/static") {
         resources("static")
@@ -22,16 +25,19 @@ fun Route.swaggerUi() {
     }
     get("/swagger-ui/{filename}") {
         val filename = getParameter("filename")
-        val resource = SwaggerUiWebjar.getFile(filename)
-        call.respond(resource)
+        val file = SwaggerUiWebjar.getFile(filename)
+        call.respond(file)
     }
 }
 
 private suspend fun ApplicationCall.respond(file: FileResponse) =
     respondBytes(file.bytes, file.type)
 
+/**
+ * Object responsible for retrieving swagger-ui files from classpath.
+ */
 object SwaggerUiWebjar {
-    const val version = "4.10.3"
+    const val version = "4.10.3" // TODO find way to define by dependency version
     const val openApiSpecPath = "/static/swagger.json"
 
     fun getFile(filename: String): FileResponse {
@@ -52,7 +58,13 @@ object SwaggerUiWebjar {
     }
 }
 
+/**
+ * Represents file for sending as a response.
+ */
 data class FileResponse(val bytes: ByteArray, val type: ContentType) {
+    /**
+     * Constructs from resource url.
+     */
     constructor(url: URL) : this(
         bytes = url.readBytes(),
         type = FileType.fromFilename(url.file).contentType,
@@ -60,7 +72,7 @@ data class FileResponse(val bytes: ByteArray, val type: ContentType) {
 }
 
 /**
- * Enum that maps file extensions to corresponding ContentType
+ * Enum that maps file extensions to corresponding ContentType. Only necessary types defined.
  */
 private enum class FileType(val extension: String, val contentType: ContentType) {
     HTML("html", Text.Html),
