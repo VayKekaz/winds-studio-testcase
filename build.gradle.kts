@@ -14,31 +14,31 @@ plugins {
 
 repositories {
     mavenCentral()
-    maven("https://jitpack.io")
 }
 
 dependencies {
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     implementation("io.ktor:ktor-server:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-    implementation("io.ktor:ktor-server-default-headers:$ktorVersion")
 
-
-    implementation("com.h2database:h2:$h2Version")
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
+
+    implementation("com.h2database:h2:$h2Version")
     implementation("com.zaxxer:HikariCP:$hikariCpVersion")
     implementation("org.flywaydb:flyway-core:$flywayVersion")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
 
     implementation("org.webjars:webjars-locator-core:0.50")
     implementation("org.webjars:swagger-ui:4.10.3")
+    /* // many attempts to generate swagger.json file based on existing code. no success
     implementation("io.bkbn:kompendium-core:latest.release") // dermo ebanoe
     implementation("io.bkbn:kompendium-swagger-ui:latest.release")
     implementation("com.github.papsign:Ktor-OpenAPI-Generator:-SNAPSHOT") // tozhe kal ebuchiy
     implementation("org.openapitools:openapi-generator:5.4.0")
     implementation("org.openapitools:openapi-generator-gradle-plugin:5.4.0")
+     */
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")

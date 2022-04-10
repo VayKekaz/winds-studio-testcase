@@ -1,9 +1,7 @@
-import io.bkbn.kompendium.swagger.SwaggerUI
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
-import io.ktor.server.http.content.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.callloging.*
 import io.ktor.server.plugins.contentnegotiation.*
@@ -20,7 +18,6 @@ import org.jetbrains.exposed.dao.exceptions.EntityNotFoundException
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import service.DatabaseFactory
 import util.defaultException
-import util.defaultExceptionHandler
 import util.disable
 import util.onException
 import web.swaggerUi
