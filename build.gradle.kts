@@ -10,6 +10,7 @@ plugins {
     kotlin("jvm") version "1.6.20"
     kotlin("plugin.serialization") version "1.6.20"
     application
+    id("com.github.johnrengelman.shadow") version "7.0.0" // fatJar, required for docker
 }
 
 repositories {
@@ -48,6 +49,14 @@ dependencies {
 
 application {
     mainClass.set("MainKt")
+}
+
+tasks {
+    shadowJar {
+        manifest {
+            attributes("Main-Class" to "MainKt")
+        }
+    }
 }
 
 tasks.withType<Test> {
