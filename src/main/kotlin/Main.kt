@@ -1,4 +1,3 @@
-import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -8,18 +7,10 @@ import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.*
 import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.plugins.doublereceive.*
-import io.ktor.server.plugins.statuspages.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import model.ServerErrorResponse
-import model.exception.RequiredParameterNotProvided
-import org.jetbrains.exposed.dao.exceptions.EntityNotFoundException
-import org.jetbrains.exposed.exceptions.ExposedSQLException
 import service.DatabaseFactory
-import util.defaultException
 import util.disable
-import util.onException
+import web.handleExceptions
 import web.swaggerUi
 import web.userRoute
 
@@ -47,16 +38,8 @@ fun Application.module() {
         userRoute()
         swaggerUi()
     }
+    handleExceptions()
 
-    install(StatusPages) {
-        defaultException<ContentTransformationException>()
-        defaultException<NumberFormatException>()
-        defaultException<RequiredParameterNotProvided>()
-        defaultException<EntityNotFoundException>(HttpStatusCode.NotFound)
-        onException<ExposedSQLException> { // bad idea to share sql queries
-            respond(ServerErrorResponse("Duplicate email.", it::class.simpleName))
-        }
-    }
 }
 
 /**
