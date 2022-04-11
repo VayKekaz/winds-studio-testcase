@@ -10,6 +10,7 @@ import io.ktor.server.plugins.doublereceive.*
 import io.ktor.server.routing.*
 import service.DatabaseFactory
 import util.disable
+import util.supposedToMockDb
 import web.handleExceptions
 import web.swaggerUi
 import web.userRoute
@@ -41,9 +42,3 @@ fun Application.module() {
     handleExceptions()
 
 }
-
-/**
- * Wraps `mockDb` HOCON property.
- */
-val Application.supposedToMockDb: Boolean
-    get() = environment.config.propertyOrNull("ktor.mockDb")?.getString()?.toBooleanStrict() == true
