@@ -24,7 +24,7 @@ constructor(
 
     override val size: Int = content.size
     val totalPages = ceil(totalElements.toDouble() / pagination.pageSize.toDouble()).toInt()
-    val isLast: Boolean = pagination.pageNumber == totalPages
+    val isLast: Boolean = pagination.pageNumber + 1 == totalPages
     val isOutOfBounds: Boolean = pagination.offset + size > totalElements
 
 
